@@ -11,18 +11,9 @@ try:
 except ImportError:  # pragma: no cover
     colab_files = None
 
-def install_libreoffice():
-    print("Installing LibreOffice... This may take a moment.")
-    subprocess.run(['apt-get', 'update'], check=True)
-    subprocess.run(['apt-get', 'install', '-y', 'libreoffice'], check=True)
-    print("LibreOffice installed.")
-
-# Ensure LibreOffice is installed if we are in a Linux environment and docx2pdf relies on it
-import platform
-if platform.system() == "Linux":
-    # Check if soffice is available, if not, install LibreOffice
-    if not shutil.which("soffice"):
-        install_libreoffice()
+# On hosted environments (e.g., Streamlit Cloud) we don't try to install LibreOffice.
+# If `soffice` is available, the conversion functions will use it; otherwise they fall
+# back to pure-Python libraries or raise a clear error.
 
 
 def convert_docx_to_pdf(src: Path, dst: Path) -> None:
